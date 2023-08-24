@@ -2,6 +2,7 @@
 
 namespace App\Http\Controllers\API;
 
+use App\Models\Transform;
 use App\Services\TransformService;
 use Exception;
 use Illuminate\Http\Request;
@@ -14,11 +15,11 @@ class TransformController extends BaseController
     /**
      * @throws Exception
      */
-    public function transform(Request $request)
+    public function transform(string $providerPath, string $transformPath, Request $request)
     {
         $transformService = new TransformService();
 
-        $transformItem = $request->transform;
+        $transformItem = Transform::where('path', $transformPath)->first();;
         $inputs = $request->all();
         $toUrl = $transformItem->to_url;
         $toMethod = $transformItem->to_method;
@@ -45,9 +46,14 @@ class TransformController extends BaseController
             'form_params' => $dataBodyRequestTransform,
         ], $transformItem->transform_type);
 
+        if (empty($response)) {
+            return [];
+        }
+
         $responseTransform = $transformItem->response_transform ?? [];
         $toResponseDataType = $transformItem->to_response_data_type;
         $responseToClient = [];
+
         if ($toResponseDataType === 'array') {
             foreach ($response as $value) {
                 $responseToClient[] = $transformService->transform($responseTransform, $value);
@@ -61,7 +67,14 @@ class TransformController extends BaseController
 
     private function executeRequest($url, $method, $data, string $dataType = 'json')
     {
-        $response = Http::send($method, $url, $data);
-        return $dataType === 'json' ? $response->json() : xml_decode($response->body());
+        try {
+            $response = Http::send($method, $url, $data);
+            if ($response->status() !== 200 && $response->status() !== 201) {
+                return [];
+            }
+            return $dataType === 'json' ? $response->json() : xml_decode($response->body());
+        } catch (Exception $e) {
+            return [];
+        }
     }
 }

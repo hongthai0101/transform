@@ -14,7 +14,7 @@ class Provider extends Model
         'name',
         'description',
         'is_active',
-        'code',
+        'path',
         'secret',
         'is_authenticate'
     ];

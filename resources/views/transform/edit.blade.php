@@ -17,7 +17,7 @@
                     <div class="card">
                         <div class="card-header">
                             <div class="card-title">
-                                <h5>Add New</h5>
+                                <h5>Edit Transform</h5>
                             </div>
                         </div>
                         <div class="card-body">
@@ -30,12 +30,18 @@
                             </div>
                             <div class="form-group">
                                 <x-adminlte-input
-                                    name="code"
-                                    placeholder="Enter Code"
-                                    value="{{ $transform->code }}"
-                                    label="Code"
+                                    name="path"
+                                    placeholder="Enter Path"
+                                    value="{{ $transform->path }}"
+                                    label="Path"
                                     enableOldSupport="true"
-                                />
+                                >
+                                    <x-slot name="bottomSlot">
+                                    <span class="text-sm text-gray">
+                                       <code>[{{ config('app.url') .'/api/' . '{providerPath}/{transformPath}' }}]</code>
+                                    </span>
+                                    </x-slot>
+                                </x-adminlte-input>
                             </div>
                             <div class="form-group">
                                 <x-adminlte-input
@@ -93,6 +99,30 @@
                                     <option value="{{ $key }}" @if($key === $transform->to_method) selected @endif >{{ $value }}</option>
                                 @endforeach
                             </x-adminlte-select2>
+                            <div class="form-group">
+                                <div class="form-check">
+                                    <input
+                                        class="form-check-input"
+                                        id="object"
+                                        type="radio"
+                                        name="to_response_data_type"
+                                        value="object"
+                                        @if($transform->to_response_data_type == 'object') checked @endif
+                                    >
+                                    <label class="form-check-label" for="object">Object</label>
+                                </div>
+                                <div class="form-check">
+                                    <input
+                                        class="form-check-input"
+                                        id="array"
+                                        type="radio"
+                                        name="to_response_data_type"
+                                        value="array"
+                                        @if($transform->to_response_data_type == 'array') checked @endif
+                                    >
+                                    <label class="form-check-label" for="array">Array</label>
+                                </div>
+                            </div>
                         </div>
                         <div class="card-footer">
                             <button type="submit" class="btn btn-primary">Save</button>

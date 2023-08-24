@@ -18,7 +18,7 @@ Route::get('/', function () {
     return redirect('/transforms');
 });
 
-Auth::routes(['register' => DB::table('users')->count() === 0]);
+Auth::routes(['register' => false]);
 
 Route::resource('/transforms', App\Http\Controllers\TransformController::class)->middleware('auth');
 Route::get('/transforms/{id}/{type}/config', [App\Http\Controllers\TransformController::class, 'transform'])->name('transforms.config')->middleware('auth');

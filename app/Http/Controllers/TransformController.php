@@ -4,7 +4,6 @@ namespace App\Http\Controllers;
 
 use App\Models\Provider;
 use App\Models\Transform;
-use App\Services\TransformService;
 use Illuminate\Http\Request;
 use Illuminate\Validation\Rule;
 use Yajra\DataTables\DataTables;
@@ -35,10 +34,11 @@ class TransformController extends Controller
             'transform_type' => 'required',
             'to_url' => 'required',
             'to_method' => 'required',
-            'code' => 'required|string|unique:transforms,code,NULL,id,provider_id,' . $request->provider_id,
+            'path' => 'required|string|unique:transforms,path,NULL,id,provider_id,' . $request->provider_id,
+            'to_response_data_type' => 'required',
         ]);
         Transform::create($request->only([
-            'provider_id', 'name', 'description', 'transform_type', 'code', 'to_url', 'to_method'
+            'provider_id', 'name', 'description', 'transform_type', 'path', 'to_url', 'to_method', 'to_response_data_type'
         ]));
         return redirect()->route('transforms.index')->with('success', 'Transform created successfully.');
     }
@@ -59,13 +59,14 @@ class TransformController extends Controller
             'transform_type' => 'required',
             'to_url' => 'required',
             'to_method' => 'required',
-            'code' => ['required','string', Rule::unique('transforms')->where(function ($query) use ($request, $id) {
-                return $query->where('provider_id', $request->provider_id)->where('id', '!=', $id)->where('code', $request->code);
+            'to_response_data_type' => 'required',
+            'path' => ['required','string', Rule::unique('transforms')->where(function ($query) use ($request, $id) {
+                return $query->where('provider_id', $request->provider_id)->where('id', '!=', $id)->where('path', $request->path);
             })],
         ]);
         $transform = Transform::find($id);
         $transform->update($request->only([
-            'provider_id', 'name', 'description', 'transform_type', 'code', 'to_url', 'to_method'
+            'provider_id', 'name', 'description', 'transform_type', 'path', 'to_url', 'to_method'
         ]));
         return redirect()->route('transforms.index')->with('success', 'Transform updated successfully.');
     }

@@ -32,11 +32,11 @@ class ProviderController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
-            'code' => 'required|string|unique:providers,code',
+            'path' => 'required|string|unique:providers,path',
             'is_active' => 'nullable',
             'is_authenticate' => 'nullable',
         ]);
-        $input = $request->only(['name', 'description', 'code', 'is_active', 'is_authenticate']);
+        $input = $request->only(['name', 'description', 'path', 'is_active', 'is_authenticate']);
         $input['is_active'] = $request->has('is_active');
         $input['is_authenticate'] = $request->has('is_authenticate');
         $item = Provider::create($input);
@@ -54,14 +54,14 @@ class ProviderController extends Controller
         $this->validate($request, [
             'name' => 'required',
             'description' => 'required',
-            'code' => ['required','string', Rule::unique('providers')->where(function ($query) use ($id, $request) {
-                $query->where('code', $request->code)->where('id', '!=', $id);
+            'path' => ['required','string', Rule::unique('providers')->where(function ($query) use ($id, $request) {
+                $query->where('path', $request->path)->where('id', '!=', $id);
             })],
             'is_active' => 'nullable',
             'is_authenticate' => 'nullable',
         ]);
         $item = Provider::find($id);
-        $input = $request->only(['name', 'description', 'code', 'is_active', 'is_authenticate']);
+        $input = $request->only(['name', 'description', 'path', 'is_active', 'is_authenticate']);
         $input['is_active'] = $request->has('is_active');
         $input['is_authenticate'] = $request->has('is_authenticate');
         $item->update($input);

@@ -14,7 +14,7 @@ return new class extends Migration
         Schema::create('transforms', function (Blueprint $table) {
             $table->id();
             $table->foreignId('provider_id')->constrained('providers');
-            $table->string('code', 50)->unique()->index();
+            $table->string('path', 80)->index();
             $table->string('name');
             $table->string('description');
             $table->string('transform_type', 20)->enum(['json', 'xml'])->default('json');

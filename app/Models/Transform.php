@@ -19,7 +19,7 @@ class Transform extends Model
         'to_method',
         'request_transform',
         'response_transform',
-        'code',
+        'path',
         'to_response_data_type'
     ];
 

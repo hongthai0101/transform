@@ -6,17 +6,31 @@ use Illuminate\Support\Arr;
 
 class TransformService
 {
-
-    public function transform($definition, $data, $isRevert = false): array
+    /**
+     * @param $definition
+     * @param array $data
+     * @param bool $isRevert
+     * @return array
+     * @throws \Exception
+     */
+    public function transform($definition,array $data, bool $isRevert = false): array
     {
         try {
+            $keys = array_keys($data);
             $transformedData = [];
+
+            $fromKeys = Arr::pluck($definition, "from_key");
+            foreach ($keys as $k) {
+                if (!in_array($k, $fromKeys)) {
+                    $transformedData[$k] = Arr::get($data, $k);
+                    unset($data[$k]);
+                }
+            }
 
             foreach ($definition as $defKey => $def) {
                 $fromKey = !$isRevert ? Arr::get($def, "from_key") : Arr::get($def, "to_key");
                 $toKey = !$isRevert ? Arr::get($def, "to_key") : Arr::get($def, "from_key");
                 $dataItem = Arr::get($data, $fromKey,null);
-
                 if ($fromKey && $toKey) {
                     if ($dataItem !== null) {
                         $transformedData[$toKey] = $dataItem;
@@ -41,6 +55,7 @@ class TransformService
                                     $childSub = Arr::get($childDefinitionItem, "child");
                                     $chiSubKey = Arr::get(array_values($childSub), '0.key');
                                     if ($chiSubKey) {
+                                        dump($chiSubKey);
                                         $childSub[$chiSubKey]['child'] = $childSub;
                                         if ($datType === 'array') {
                                             foreach ($childItem as $c) {
@@ -52,6 +67,7 @@ class TransformService
                                     }
                                 }else {
                                     if (!is_array($childItem) && !is_object($childItem)) {
+                                        $toKeyChild = $fromKeyChild ?? $key;
                                         $transformedChildData[$toKeyChild] = $childItem;
                                     } else {
                                         $transformedChildData[] = $this->transform($childDefinition, $childItem, $isRevert);

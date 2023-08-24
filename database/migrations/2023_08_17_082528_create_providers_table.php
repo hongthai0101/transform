@@ -13,7 +13,7 @@ return new class extends Migration
     {
         Schema::create('providers', function (Blueprint $table) {
             $table->id();
-            $table->string('code', 50)->unique()->index();
+            $table->string('path', 50)->unique()->index();
             $table->string('secret', 250)->unique()->index();
             $table->boolean('is_authenticate')->default(true);
             $table->string('name');

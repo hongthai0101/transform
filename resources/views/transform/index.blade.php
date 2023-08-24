@@ -23,7 +23,7 @@
                                 <tr>
                                     <th>ID</th>
                                     <th>Provider</th>
-                                    <th>Code</th>
+                                    <th>Path</th>
                                     <th>Name</th>
                                     <th>Description</th>
                                     <th>To Method</th>
@@ -58,7 +58,7 @@
                 columns:[
                     {data:'id', name:'id'},
                     {data:'provider', name:'provider'},
-                    {data:'code', name:'code'},
+                    {data:'path', name:'path'},
                     {data:'name', name:'name'},
                     {data:'description', name:'description'},
                     {data:'to_method', name:'to_method'},

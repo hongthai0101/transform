@@ -24,10 +24,10 @@
                         </div>
                         <div class="card-body">
                             <div class="form-group">
-                                <label for="name" class="form-label">Code <span class="text-danger">*</span></label>
-                                <input type="text" class="form-control" name="code" placeholder="Enter Name" value="{{old('code', optional($item)->code)}}">
-                                @if($errors->has('code'))
-                                    <span class="text-danger">{{$errors->first('code')}}</span>
+                                <label for="path" class="form-label">Path <span class="text-danger">*</span></label>
+                                <input type="text" class="form-control" name="path" placeholder="Enter Path" value="{{old('path', optional($item)->path)}}">
+                                @if($errors->has('path'))
+                                    <span class="text-danger">{{$errors->first('path')}}</span>
                                 @endif
                             </div>
                             <div class="form-group">
@@ -81,7 +81,7 @@
                                 <thead>
                                 <tr>
                                     <th>ID</th>
-                                    <th>Code</th>
+                                    <th>Path</th>
                                     <th>Authenticated</th>
                                     <th>Active</th>
                                     <th>Name</th>
@@ -115,7 +115,7 @@
                 ajax:"{{route('providers.index')}}",
                 columns:[
                     {data:'id', name:'id'},
-                    {data:'code', name:'code'},
+                    {data:'path', name:'path'},
                     {data:'is_authenticate', name:'is_authenticate'},
                     {data:'is_active', name:'is_active'},
                     {data:'name', name:'name'},
