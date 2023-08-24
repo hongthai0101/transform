@@ -43,7 +43,6 @@ class TransformService
 
                         if (is_array($childData) || is_object($childData)) {
                             foreach ($childData as $key => $childItem) {
-
                                 $childDefinitionItem = Arr::first($childDefinition, function ($item) use ($key) {
                                     return Arr::get($item, "from_key") === $key;
                                 });
@@ -55,7 +54,6 @@ class TransformService
                                     $childSub = Arr::get($childDefinitionItem, "child");
                                     $chiSubKey = Arr::get(array_values($childSub), '0.key');
                                     if ($chiSubKey) {
-                                        dump($chiSubKey);
                                         $childSub[$chiSubKey]['child'] = $childSub;
                                         if ($datType === 'array') {
                                             foreach ($childItem as $c) {
@@ -67,7 +65,7 @@ class TransformService
                                     }
                                 }else {
                                     if (!is_array($childItem) && !is_object($childItem)) {
-                                        $toKeyChild = $fromKeyChild ?? $key;
+                                        $toKeyChild = $toKeyChild ?? $key;
                                         $transformedChildData[$toKeyChild] = $childItem;
                                     } else {
                                         $transformedChildData[] = $this->transform($childDefinition, $childItem, $isRevert);
