@@ -3,6 +3,8 @@
 @section('title', 'Config Transform | Dashboard')
 @section('content')
     <br>
+    <a href="{{ route('transforms.index') }}" class="btn btn-warning">Back</a>
+    <hr>
     <div class="container-fluid">
         <div class="row">
             <div class="col-12">
@@ -25,8 +27,8 @@
                             </li>
                             <li class="nav-item active">
                                 <div class="nav-link">
-                                    Code:
-                                    <span class="float-right">{{ $transform->code }}</span>
+                                    Path:
+                                    <span class="float-right">{{ $transform->path }}</span>
                                 </div>
                             </li>
                             <li class="nav-item active">

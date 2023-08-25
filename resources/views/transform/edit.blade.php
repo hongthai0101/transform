@@ -2,15 +2,13 @@
 
 @section('title', 'Edit Transform | Dashboard')
 
-@section('content_header')
-    <h1>Edit Transform</h1>
-@stop
-
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div id="errorBox"></div>
             <div class="col-12">
+                <br>
+                <a href="{{ route('transforms.index') }}" class="btn btn-warning">Back</a>
+                <hr>
                 <form method="POST" action="{{ route('transforms.update', $transform->id) }}">
                     @csrf
                     @method('PATCH')

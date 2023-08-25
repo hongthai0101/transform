@@ -5,6 +5,7 @@ namespace App\Models;
 use Illuminate\Database\Eloquent\Factories\HasFactory;
 use Illuminate\Database\Eloquent\Model;
 use Illuminate\Database\Eloquent\Relations\HasMany;
+use Illuminate\Support\Str;
 
 class Provider extends Model
 {
@@ -43,7 +44,7 @@ class Provider extends Model
 
     public static function generateSecret(): string
     {
-        $secret = strtoupper(substr(md5(uniqid(rand(), true)), 0, 80));
+        $secret = Str::random(40);
         if (self::where('secret', $secret)->exists()) {
             return self::generateSecret();
         }

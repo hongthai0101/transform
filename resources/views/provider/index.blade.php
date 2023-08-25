@@ -96,6 +96,15 @@
             </div>
         </div>
     </div>
+    <x-adminlte-button label="Open Modal" data-toggle="modal" data-target="#modalMin"/>
+    <x-adminlte-modal id="modalMin" title="Secret Information">
+        <div id="secret" data-id="">
+
+        </div>
+        <x-slot name="footerSlot">
+            <x-adminlte-button class="mr-auto" theme="success" class="btn-generate-secret" label="Generate Secret"/>
+        </x-slot>
+    </x-adminlte-modal>
 @stop
 
 @section('css')
@@ -146,6 +155,43 @@
                     //do nothing
                 }
             });
+
+            $(document).on('click', '.btn-secret', function() {
+                var id = $(this).data('id');
+                $('#secret').attr('data-id', id);
+                var route = "{{route('providers.secret', ':id')}}";
+                route = route.replace(':id', id);
+                $.ajax({
+                    url:route,
+                    type:"get",
+                    success:function(res){
+                        $('#secret').html('');
+                        $('#secret').html(res.message);
+                    },
+                    error:function(res){
+                        console.log(res);
+                        $('#errorBox').html('<div class="alert alert-dander">'+response.message+'</div>');
+                    }
+                });
+            });
+
+            $('.btn-generate-secret').off().on('click', function (){
+                var id = $('#secret').data('id');
+                var route = "{{route('providers.secret.generate', ':id')}}";
+                route = route.replace(':id', id);
+                $.ajax({
+                    url:route,
+                    type:"PATCH",
+                    success:function(res){
+                        $('#secret').html('');
+                        $('#secret').html(res.message);
+                    },
+                    error:function(res){
+                        console.log(res);
+                        $('#errorBox').html('<div class="alert alert-dander">'+response.message+'</div>');
+                    }
+                });
+            })
         });
     </script>
 @stop

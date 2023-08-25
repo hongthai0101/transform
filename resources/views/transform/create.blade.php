@@ -2,15 +2,13 @@
 
 @section('title', 'Add Transform | Dashboard')
 
-@section('content_header')
-    <h1>Add Transform</h1>
-@stop
-
 @section('content')
     <div class="container-fluid">
         <div class="row">
-            <div id="errorBox"></div>
             <div class="col-12">
+                <br>
+                <a href="{{ route('transforms.index') }}" class="btn btn-warning">Back</a>
+                <hr>
                 <form method="POST" action="{{ route('transforms.store') }}">
                     @csrf
                     <div class="card">

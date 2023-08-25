@@ -94,13 +94,36 @@ class ProviderController extends Controller
     private function getProvider()
     {
         $data = Provider::get();
-        //dd($data);
         return DataTables::of($data)
             ->addColumn('action', function($row){
-                $action = "<a class='btn btn-xs btn-warning' id='btnEdit' href='" . route('providers.index', ['id' => $row->id]) . "'><i class='fas fa-edit'></i></a>";
+                $action = "<button type='button' class='btn btn-xs btn-info btn-secret' data-id='" . $row->id . "' data-toggle='modal' data-target='#modalMin'>
+         Secret </button> &nbsp; &nbsp;";
+                $action .= "<a class='btn btn-xs btn-warning' id='btnEdit' href='" . route('providers.index', ['id' => $row->id]) . "'><i class='fas fa-edit'></i></a>";
                 $action.=" <button class='btn btn-xs btn-outline-danger' id='btnDel' data-id='".$row->id."'><i class='fas fa-trash'></i></button>";
                 return $action;
             })
             ->rawColumns(['action'])->make('true');;
+    }
+
+    public function secret(int $id, Request $request)
+    {
+        $item = Provider::find($id);
+        if($request->ajax() && $item)
+        {
+            return response(["message" => $item->secret], 200);
+        }
+        return response(["message" => "Error! Please Try again"], 400);
+    }
+
+    public function generateSecret(int $id, Request $request)
+    {
+        $item = Provider::find($id);
+        if($request->ajax() && $item)
+        {
+            $item->secret = Provider::generateSecret();
+            $item->save();
+            return response(["message" => $item->secret], 200);
+        }
+        return response(["message" => "Error! Please Try again"], 400);
     }
 }
