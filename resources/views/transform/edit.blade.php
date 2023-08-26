@@ -22,7 +22,7 @@
                             <div class="form-group">
                                 <x-adminlte-select2 name="provider_id" label="Provider" enableOldSupport="true">
                                     @foreach($providers as $provider)
-                                        <option value="{{ $provider->id }}">{{ $provider->name }}</option>
+                                        <option value="{{ $provider->id }}" @if($transform->provider_id == $provider->id) selected @endif>{{ $provider->name }}</option>
                                     @endforeach
                                 </x-adminlte-select2>
                             </div>
