@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use Exception;
 use Illuminate\Support\Arr;
 
 class TransformService
@@ -9,27 +10,29 @@ class TransformService
     /**
      * @param $definition
      * @param array $data
-     * @param bool $isRevert
+     * @param bool $isMergeData
      * @return array
-     * @throws \Exception
+     * @throws Exception
      */
-    public function transform($definition,array $data, bool $isRevert = false): array
+    public function transform($definition,array $data, bool $isMergeData = true): array
     {
         try {
             $keys = array_keys($data);
             $transformedData = [];
 
-            $fromKeys = Arr::pluck($definition, "from_key");
-            foreach ($keys as $k) {
-                if (!in_array($k, $fromKeys)) {
-                    $transformedData[$k] = Arr::get($data, $k);
-                    unset($data[$k]);
+            if ($isMergeData) {
+                $fromKeys = Arr::pluck($definition, "from_key");
+                foreach ($keys as $k) {
+                    if (!in_array($k, $fromKeys)) {
+                        $transformedData[$k] = Arr::get($data, $k);
+                        unset($data[$k]);
+                    }
                 }
             }
 
             foreach ($definition as $defKey => $def) {
-                $fromKey = !$isRevert ? Arr::get($def, "from_key") : Arr::get($def, "to_key");
-                $toKey = !$isRevert ? Arr::get($def, "to_key") : Arr::get($def, "from_key");
+                $fromKey = Arr::get($def, "from_key");
+                $toKey = Arr::get($def, "to_key");
                 $dataItem = Arr::get($data, $fromKey,null);
                 if ($fromKey && $toKey) {
                     if ($dataItem !== null) {
@@ -57,10 +60,10 @@ class TransformService
                                         $childSub[$chiSubKey]['child'] = $childSub;
                                         if ($datType === 'array') {
                                             foreach ($childItem as $c) {
-                                                $transformedChildData[$toKeyChild][] = $this->transform($childSub, $c, $isRevert);
+                                                $transformedChildData[$toKeyChild][] = $this->transform($childSub, $c, $isMergeData);
                                             }
                                         }else {
-                                            $transformedChildData[$toKeyChild] = $this->transform($childSub, $childItem, $isRevert);
+                                            $transformedChildData[$toKeyChild] = $this->transform($childSub, $childItem, $isMergeData);
                                         }
                                     }
                                 }else {
@@ -68,7 +71,7 @@ class TransformService
                                         $toKeyChild = $toKeyChild ?? $key;
                                         $transformedChildData[$toKeyChild] = $childItem;
                                     } else {
-                                        $transformedChildData[] = $this->transform($childDefinition, $childItem, $isRevert);
+                                        $transformedChildData[] = $this->transform($childDefinition, $childItem, $isMergeData);
                                     }
                                 }
                             }
@@ -79,7 +82,7 @@ class TransformService
             }
 
             return $transformedData;
-        } catch (\Exception $e) {
+        } catch (Exception $e) {
             throw $e;
         }
     }

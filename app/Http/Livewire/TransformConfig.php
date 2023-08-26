@@ -2,6 +2,7 @@
 
 namespace App\Http\Livewire;
 
+use App\Models\Log;
 use App\Models\Transform;
 use App\Services\TransformService;
 use Illuminate\Support\Str;
@@ -40,6 +41,11 @@ class TransformConfig extends Component
             $configs = $item->response_transform ?? [];
         }
         $this->list = $configs;
+
+        // get data test
+        $log = Log::where('transform_id', $id)->where('type', $type)->orderBy('id', 'DESC')->first();
+        $this->inputs = $log ? $log->inputs : '';
+        $this->outputs = $log ? $log->outputs : '';
     }
 
     public function add()
@@ -149,6 +155,14 @@ class TransformConfig extends Component
         $transformService = new TransformService();
         $outputs = $transformService->transform($this->list, $inputs);
         $this->outputs = json_encode($outputs, JSON_PRETTY_PRINT);
+
+        Log::create([
+            'transform_id' => $this->transformId,
+            'type' => $this->type,
+            'inputs' => $this->inputs,
+            'outputs' => $this->outputs
+        ]);
+
         $this->validInput = true;
         $this->messageInput = '';
     }
