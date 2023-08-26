@@ -22,7 +22,7 @@
                             <li class="nav-item active">
                                 <div class="nav-link">
                                     Provider:
-                                    <span class="float-right">{{ $transform->provider->name }}</span>
+                                    <span class="float-right">{{ optional($transform->provider)->name . ' (' . optional($transform->provider)->path . ' )' }}</span>
                                 </div>
                             </li>
                             <li class="nav-item active">

@@ -36,14 +36,14 @@ class TransformController extends BaseController
             return $value['position'] === 'body';
         });
 
-        $dataHeaderRequestTransform = $transformService->transform($headersTransform, $inputs);
-        $dataQueryRequestTransform = $transformService->transform($queryTransform, $inputs);
+        $dataHeaderRequestTransform = $transformService->transform($headersTransform, $inputs, false);
+        $dataQueryRequestTransform = $transformService->transform($queryTransform, $inputs, false);
         $dataBodyRequestTransform = $transformService->transform($bodyTransform, $inputs);
 
         $response = $this->executeRequest($toUrl, $toMethod, [
             'headers' => $transformService->removeEmptyValuesRecursive($dataHeaderRequestTransform),
             'query' => $dataQueryRequestTransform,
-            'form_params' => $dataBodyRequestTransform,
+            'body' => json_encode($dataBodyRequestTransform),
         ], $transformItem->transform_type);
 
         if (empty($response)) {
