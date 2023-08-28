@@ -19,8 +19,9 @@ class TransformController extends BaseController
     {
         $transformService = new TransformService();
 
-        $transformItem = Transform::where('path', $transformPath)->first();;
-        $inputs = $request->all();
+        $transformItem = Transform::where('path', $transformPath)->first();
+        $transformType = $transformItem->transform_type;
+        $inputs = $transformType === 'json' ? $request->all() : xml_decode($request->getContent());
         $toUrl = $transformItem->to_url;
         $toMethod = $transformItem->to_method;
 
@@ -44,7 +45,7 @@ class TransformController extends BaseController
             'headers' => $transformService->removeEmptyValuesRecursive($dataHeaderRequestTransform),
             'query' => $dataQueryRequestTransform,
             'body' => json_encode($dataBodyRequestTransform),
-        ], $transformItem->transform_type);
+        ], $transformType);
 
         if (empty($response)) {
             return [];
@@ -62,7 +63,11 @@ class TransformController extends BaseController
             $responseToClient = $transformService->transform($responseTransform, $response);
         }
 
-        return $transformService->removeEmptyValuesRecursive($responseToClient);
+        if ($transformType === 'json') {
+            return $transformService->removeEmptyValuesRecursive($responseToClient);
+        }
+
+        return xml_encode($transformService->removeEmptyValuesRecursive($responseToClient));
     }
 
     private function executeRequest($url, $method, $data, string $dataType = 'json')
