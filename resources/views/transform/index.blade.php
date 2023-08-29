@@ -25,7 +25,7 @@
                                     <th>Provider</th>
                                     <th>Path</th>
                                     <th>Name</th>
-                                    <th>Description</th>
+                                    <th>Transform Type</th>
                                     <th>To Method</th>
                                     <th>Transform</th>
                                     <th>Action</th>
@@ -60,7 +60,7 @@
                     {data:'provider', name:'provider'},
                     {data:'path', name:'path'},
                     {data:'name', name:'name'},
-                    {data:'description', name:'description'},
+                    {data:'transform_type', name:'transform_type'},
                     {data:'to_method', name:'to_method'},
                     {data:'transform', name:'transform', bSortable:false, className:"text-center"},
                     {data:'action', name:'action', bSortable:false, className:"text-center"},
