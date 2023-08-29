@@ -51,7 +51,7 @@ class TransformConfig extends Component
         $this->inputs = $log ? $log->inputs : '';
         $this->outputs = $log ? $log->outputs : '';
         $this->transform = $item;
-        $this->metadata = $item->metadata;
+        $this->metadata = $item->metadata ?? [];
     }
 
     public function add()
