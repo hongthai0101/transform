@@ -20,12 +20,14 @@ class Transform extends Model
         'request_transform',
         'response_transform',
         'path',
-        'to_response_data_type'
+        'to_response_data_type',
+        'metadata'
     ];
 
     protected $casts = [
         'request_transform' => 'array',
         'response_transform' => 'array',
+        'metadata' => 'array'
     ];
 
     /**

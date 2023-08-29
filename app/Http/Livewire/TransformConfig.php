@@ -18,6 +18,10 @@ class TransformConfig extends Component
 
     public int $transformId;
 
+    public Transform $transform;
+
+    public array $metadata = [];
+
     public string $type = '';
 
     public string $inputs = '';
@@ -46,6 +50,8 @@ class TransformConfig extends Component
         $log = Log::where('transform_id', $id)->where('type', $type)->orderBy('id', 'DESC')->first();
         $this->inputs = $log ? $log->inputs : '';
         $this->outputs = $log ? $log->outputs : '';
+        $this->transform = $item;
+        $this->metadata = $item->metadata;
     }
 
     public function add()
@@ -165,6 +171,14 @@ class TransformConfig extends Component
 
         $this->validInput = true;
         $this->messageInput = '';
+    }
+
+    public function saveMetadata()
+    {
+        Transform::find($this->transformId)->update([
+            'metadata' => $this->metadata
+        ]);
+        $this->message = 'Successfully saved';
     }
 
     private function findNestedKeys($array, $key, $value, $path = []): array {

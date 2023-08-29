@@ -67,7 +67,15 @@ class TransformController extends BaseController
             return $transformService->removeEmptyValuesRecursive($responseToClient);
         }
 
-        return xml_encode($transformService->removeEmptyValuesRecursive($responseToClient));
+        if ($transformType === 'xml') {
+            $rootElementName =  Arr::get($transformItem->metadata, 'transform_element_root', 'document');
+
+            return xml_encode(
+                $transformService->removeEmptyValuesRecursive($responseToClient),
+                $rootElementName
+            );
+        }
+        return [];
     }
 
     private function executeRequest($url, $method, $data, string $dataType = 'json')

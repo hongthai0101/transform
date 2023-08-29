@@ -23,6 +23,7 @@ return new class extends Migration
             $table->string('to_response_data_type', 20)->enum(['array', 'object'])->default('object');
             $table->json('request_transform')->nullable();
             $table->json('response_transform')->nullable();
+            $table->json('metadata')->nullable();
             $table->timestamps();
         });
     }
