@@ -21,7 +21,7 @@
                         </div>
                     </x-slot>
                     <x-slot name="appendSlot">
-                        <x-adminlte-button theme="primary" label="Transform" wire:click="transform"/>
+                        <x-adminlte-button theme="primary" label="Transform" wire:click="transformTest"/>
                     </x-slot>
                 </x-adminlte-textarea>
             </div>

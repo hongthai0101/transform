@@ -126,7 +126,7 @@ class TransformConfig extends Component
         $this->message = 'Successfully saved';
     }
 
-    public function transform()
+    public function transformTest()
     {
         $transform = Transform::find($this->transformId);
         if (!$transform) {
