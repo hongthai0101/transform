@@ -26,3 +26,5 @@ Route::get('/providers/{id}/secret', [App\Http\Controllers\ProviderController::c
 Route::patch('/providers/{id}/secret', [App\Http\Controllers\ProviderController::class, 'generateSecret'])->middleware('auth')->name('providers.secret.generate');
 Route::get('/change-password', [App\Http\Controllers\AuthController::class, 'password'])->middleware('auth')->name('auth.change-password');
 Route::patch('/change-password', [App\Http\Controllers\AuthController::class, 'changePassword'])->middleware('auth')->name('auth.change-password');
+
+Route::post('/webhook', 'TelegramBotController@webhook');
