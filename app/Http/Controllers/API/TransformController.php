@@ -44,7 +44,7 @@ class TransformController extends BaseController
         $response = $this->executeRequest($toUrl, $toMethod, [
             'headers' => $transformService->removeEmptyValuesRecursive($dataHeaderRequestTransform),
             'query' => $dataQueryRequestTransform,
-            'body' => json_encode($dataBodyRequestTransform),
+            'body' => $dataBodyRequestTransform
         ], $transformType);
 
         if (empty($response)) {
@@ -81,7 +81,25 @@ class TransformController extends BaseController
     private function executeRequest($url, $method, $data, string $dataType = 'json')
     {
         try {
-            $response = Http::send($method, $url, $data);
+            $http = Http::withHeaders(Arr::get($data, 'headers', []));
+            switch ($method) {
+                case 'POST':
+                    $response = $http->post($url, Arr::get($data, 'body', []));
+                    break;
+                case 'PUT':
+                    $response = $http->put($url, Arr::get($data, 'body', []));
+                    break;
+                case 'PATCH':
+                    $response = $http->patch($url, Arr::get($data, 'body', []));
+                    break;
+                case 'DELETE':
+                    $response = $http->delete($url, Arr::get($data, 'body', []));
+                    break;
+                case 'GET':
+                default:
+                    $response = $http->get($url, Arr::get($data, 'query', []));
+                    break;
+            }
             if ($response->status() !== 200 && $response->status() !== 201) {
                 return [];
             }

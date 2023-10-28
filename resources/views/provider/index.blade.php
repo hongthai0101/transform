@@ -96,7 +96,6 @@
             </div>
         </div>
     </div>
-    <x-adminlte-button label="Open Modal" data-toggle="modal" data-target="#modalMin"/>
     <x-adminlte-modal id="modalMin" title="Secret Information">
         <div id="secret" data-id="">
 

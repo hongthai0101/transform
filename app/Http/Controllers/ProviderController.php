@@ -102,7 +102,7 @@ class ProviderController extends Controller
                 $action.=" <button class='btn btn-xs btn-outline-danger' id='btnDel' data-id='".$row->id."'><i class='fas fa-trash'></i></button>";
                 return $action;
             })
-            ->rawColumns(['action'])->make('true');;
+            ->rawColumns(['action'])->make('true');
     }
 
     public function secret(int $id, Request $request)
