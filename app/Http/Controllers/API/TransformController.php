@@ -64,7 +64,7 @@ class TransformController extends BaseController
         }
 
         if ($transformType === 'json') {
-            return $transformService->removeEmptyValuesRecursive($responseToClient);
+            return $responseToClient;
         }
 
         if ($transformType === 'xml') {
